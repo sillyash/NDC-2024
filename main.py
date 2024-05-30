@@ -73,6 +73,7 @@ class App:
         self.player = Player(50, 50)
         self.flies = []
         self.nest = Nest()
+        pyxel.playm(0, 0, True)
         pyxel.run(self.update, self.draw)
 
     def update(self):
@@ -102,13 +103,13 @@ class App:
         for fly in self.flies:
             fly.update()
             if collision(fly.rect(), self.nest.rect()):
-                "qsrbeufrgufzzguzerfguii"
                 self.flies.remove(fly)
                 self.nest.removeLife(2)
 
 
     def draw(self):
         pyxel.cls(5)
+        pyxel.bltm(0, 0, 1, 0, 0, 255, 255)
         self.player.draw()
         #self.nectar.draw()
         #self.nest.draw()
