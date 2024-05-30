@@ -15,23 +15,42 @@ class App:
         pyxel.run(self.update, self.draw)
 
     def update(self):
-        print()
+        self.player.update()PLAYER_SPEED
 
     def draw(self):
-        pyxel.cls(0)
+        pyxel.cls(5)
         self.player.draw()
 
 
 # CONSTANTES PLAYER
+#SPRITES
 s1 = (0, 0, 120, 16, 16, 5)
+
+PLAYER_SPEED = 55/FPS
 
 class Player:
     def __init__(self, x:int, y:int):
         self.x = x
         self.y = y
+        self.life = 5
+        self.cSprite = s1
+
+    def update(self):
+        self.move()
+        
+    def move(self):
+        if pyxel.btn(pyxel.KEY_Z):
+            self.y -= PLAYER_SPEED
+        if pyxel.btn(pyxel.KEY_S):
+            self.y += PLAYER_SPEED
+        if pyxel.btn(pyxel.KEY_Q):
+            self.x -= PLAYER_SPEED
+        if pyxel.btn(pyxel.KEY_D):
+            self.x += PLAYER_SPEED
+        
 
     def draw(self):
-        pyxel.blt(self.x, self.y, s1[0], s1[1], s1[2], s1[3], s1[4], s1[5])      
+        pyxel.blt(self.x, self.y, self.cSprite[0], self.cSprite[1], self.cSprite[2], self.cSprite[3], self.cSprite[4], self.cSprite[5])      
 
 
 
