@@ -31,17 +31,14 @@ class App:
         pyxel.mouse(True)
         self.x = 0
         self.player = Player(50, 50)
-        self.proj = bullet(40,40)
         pyxel.run(self.update, self.draw)
 
     def update(self):
         self.player.update()
-        self.proj.update()
 
     def draw(self):
         pyxel.cls(5)
         self.player.draw()
-        self.proj.draw()
 
 # ------------------------------------------------
 
@@ -97,12 +94,14 @@ class Player:
 
         if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT) and pyxel.frame_count - self.timer > COOLDOWN*FPS:
             self.timer = pyxel.frame_count
-            bull = bullet(self.x, self.y)
+            bull = bullet(self.x, self.y, webBall)
             self.bullets.append(bull)
             
 
         for bull in self.bullets:
             bull.update()
+            if bull.touchBorder():
+                self.bullets.remove(bull)
 
 
     def draw(self):
@@ -212,9 +211,10 @@ BULLET_SPEED = 100/FPS
 webBall = (0,131,193,4,4,5)
 
 class bullet:
-    def __init__(self, x : float, y : float) -> None:
+    def __init__(self, x : float, y : float, sprite) -> None:
         self.x = x + 4
         self.y = y + 4
+        self.sprite = sprite
         self.direction = self.mouseDirection()
         print(self.mouseDirection())
 
@@ -227,11 +227,24 @@ class bullet:
         y = pyxel.mouse_y - self.y
 
         return normalizeVector(x,y)
-        
+    
+    def touchBorder(self) -> bool:
+        if self.x < 0:
+            return True
+        elif self.x > WIDTH:
+            return True
 
+        if self.y < 0:
+            return True
+        elif self.y > HEIGHT:
+            return True
+        return False
         
     def draw(self) -> None:
-        pyxel.blt(self.x, self.y, webBall[0], webBall[1], webBall[2], webBall[3], webBall[4], webBall[5])
+        pyxel.blt(self.x, self.y, self.sprite[0], webBall[1], self.sprite[2], self.sprite[3], self.sprite[4], self.sprite[5])
+
+
+
 
 def normalizeVector(x : int, y : int) -> tuple:
     
@@ -243,7 +256,7 @@ def normalizeVector(x : int, y : int) -> tuple:
             return(x/abs(y), y/abs(y))
     else:
         return(x/abs(x),x/abs(x))
-
+    
 
 def abs(x):
     return x*pyxel.sgn(x)
