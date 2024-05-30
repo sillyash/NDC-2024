@@ -5,23 +5,37 @@ HEIGHT = 128
 WIDTH = 128
 FPS = 128
 
+fullHeart = (48,216,15,15)
+halfHeart = (51,203,10,10)
+emptyHeart = (51,187,10,10)
+lightningEmpty = (35,187,10,10)
+lightningFull = (35,203,10,10)
+
+powerup = (18,234,12,12)
+powerupBoom = (34,234,12,12)
+
+#debut de l'animation mouche qui vole faire v+16 pour passer à la suivante 
+fly = (128,8,16,16)
+
+#debut de l'animation d'explotion faire v+16 pour passer à la suivante 
+boom = (128,32,16,16)
+
+
+
 # ------------------------------------------------
 
 class App:
     def __init__(self):
         pyxel.init(HEIGHT, WIDTH, "Nuit du Code", FPS)
-        pyxel.load("3.pyxres")
         self.x = 0
-        self.player = Player(50,50)
         pyxel.run(self.update, self.draw)
 
     def update(self):
         self.player.update()
-        
 
     def draw(self):
-        pyxel.cls(5)
-        self.player.draw()
+        pyxel.cls(0)
+        p1.draw()
 
 # ------------------------------------------------
 
