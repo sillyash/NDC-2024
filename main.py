@@ -5,14 +5,14 @@ HEIGHT = 128
 WIDTH = 128
 FPS = 128
 
-fullHeart = (48,216,15,15)
-halfHeart = (51,203,10,10)
-emptyHeart = (51,187,10,10)
-lightningEmpty = (35,187,10,10)
-lightningFull = (35,203,10,10)
+fullHeart = (0,48,216,15,15)
+halfHeart = (0,51,203,10,10)
+emptyHeart = (0,51,187,10,10)
+lightningEmpty = (0,35,187,10,10)
+lightningFull = (0,35,203,10,10)
 
-powerup = (18,234,12,12)
-powerupBoom = (34,234,12,12)
+powerup = (0,18,234,12,12)
+powerupBoom = (0,34,234,12,12)
 
 #debut de l'animation mouche qui vole faire v+16 pour passer à la suivante 
 fly = (128,8,16,16)
@@ -27,15 +27,17 @@ boom = (128,32,16,16)
 class App:
     def __init__(self):
         pyxel.init(HEIGHT, WIDTH, "Nuit du Code", FPS)
+        pyxel.load("3.pyxres")
         self.x = 0
+        self.player = Player(50, 50)
         pyxel.run(self.update, self.draw)
 
     def update(self):
         self.player.update()
 
     def draw(self):
-        pyxel.cls(0)
-        p1.draw()
+        pyxel.cls(5)
+        self.player.draw()
 
 # ------------------------------------------------
 
@@ -48,11 +50,11 @@ class Icon:
     def update(self) -> None:
         if (pyxel.frame_count % (FPS/2) == 0):
             self.y += 1
-        elif (pyxel.frame_count % FPS == 0):
+        if (pyxel.frame_count % FPS == 0):
             self.y -= 2
 
     def draw(self) -> None:
-        pyxel.blt(self.x, self.y, self.sp[0], self.sp[1], self.sp[2], self.sp[3])
+        pyxel.blt(self.x, self.y, self.sp[0], self.sp[1], self.sp[2], self.sp[3], self.sp[4], 5)
 
 # --------------------------------------------------
 
@@ -76,24 +78,27 @@ class Player:
     def update(self):
         self.move()
         for i in range(len(self.icons)):
-            for icon in range(self.icons[i]):
+            for icon in self.icons[i]:
                 icon.update()
 
     def draw(self):
         pyxel.blt(self.x, self.y, self.cSprite[0], self.cSprite[1], self.cSprite[2], self.cSprite[3], self.cSprite[4], self.cSprite[5])  
         # draw icons
         for i in range(len(self.icons)):
-            for icon in range(self.icons[i]):
+            for icon in self.icons[i]:
                 icon.draw()
 
     def Initialize_Icons(self) -> None:
         heart1 = Icon(3, 3, fullHeart)
         heart2 = Icon(10, 3, fullHeart)
         heart3 = Icon(17, 3, fullHeart)
-        self.hearts.append(heart1, heart2, heart3)
-        light1 = Icon(125, 125, lightningEmpty)
-        light2 = Icon(118, 125, lightningEmpty)
-        self.lightnings.append(light1, light2) 
+        self.hearts.append(heart1)
+        self.hearts.append(heart2)
+        self.hearts.append(heart3)
+        light1 = Icon(105, 115, lightningEmpty)
+        light2 = Icon(115, 115, lightningEmpty)
+        self.lightnings.append(light1)
+        self.lightnings.append(light2) 
 
     def move(self):
         isMoving = False
