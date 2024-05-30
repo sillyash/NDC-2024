@@ -6,6 +6,8 @@ HellSpyders : Divers Redemption II : Fight the swarm !
 
 Etablissement : IUT d'Orsay (niveau BUT 1)
 
+Nom de groupe : HellDevers
+
 Membres du groupe :
 
 |~~~~~~~~~~~~~~|
@@ -13,8 +15,6 @@ Membres du groupe :
 | Ash MERIENNE |
 | Naomie FAZER |
 |~~~~~~~~~~~~~~|
-
-Nom de groupe : HellDevers
 
 ------------------------------------------------------------
 ----------------------- Présentation -----------------------
@@ -35,7 +35,7 @@ son espèce en dépend.
 ------------------------------------------------------------
 
 Le joueur se déplace en utilisant les touches Z,Q,S,D, et
-peut tirer des fils surpuissants avec le clic-droit de la
+peut tirer des fils surpuissants avec le clic-gauche de la
 souris pour repousser et tuer les "Divers", les empêchant
 ainsi de s'approcher du nid.
 
@@ -80,7 +80,4 @@ du joueur.
 Certains Divers laissent leurs explosifs sur le champ de
 bataille lorsqu'ils dépérissent. Ces explosifs explosent au
 contact des fils tirés par le joueur.
-
-
-
 
