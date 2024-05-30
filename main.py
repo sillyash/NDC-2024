@@ -112,6 +112,12 @@ class App:
             if collision(fly.rect(), self.nest.rect()):
                 self.flies.remove(fly)
                 self.nest.removeLife(2)
+        
+        # update joueur & mouches
+        for fly in self.flies:
+            if collision(fly.rect(), self.player.rect()):
+                self.player.removeLife(1)
+                self.flies.remove(fly)
 
 
     def draw(self):
@@ -187,7 +193,7 @@ class Player:
         self.cSprite = s1
         self.direction = 1
         self.cursor = 0
-        self.lives = 6
+        self.life = 6
 
         #bullets
         self.timer = 0
@@ -219,8 +225,6 @@ class Player:
     def removeLife(self, dmg):
         if self.life > 0:
             self.life -= dmg
-        else:
-            self.die()
 
     def draw(self):
         for bullet in self.bullets:
@@ -235,6 +239,17 @@ class Player:
         heart1 = Icon(3, 3, fullHeart)
         heart2 = Icon(10, 3, fullHeart)
         heart3 = Icon(17, 3, fullHeart)
+        if(self.life == 5):
+            heart3 = Icon(17,3,halfHeart)
+        if(self.life == 4):
+            heart3 = Icon(17,3,emptyHeart)
+        if(self.life == 3):
+            heart2 = Icon(17,3,halfHeart)
+        if(self.life == 2):
+            heart2 = Icon(17,3,emptyHeart)
+        if(self.life == 1):
+            heart1 = Icon(17,3,halfHeart)
+            
         self.hearts.append(heart1)
         self.hearts.append(heart2)
         self.hearts.append(heart3)
