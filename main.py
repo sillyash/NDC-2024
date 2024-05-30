@@ -166,8 +166,8 @@ s1 = (0, 0, 120, 16, 16, 5)
 PLAYER_SPEED = 80/FPS
 
 #ANIMATIONS
-idle = (0, 120, 2, 4)
-walk = (0, 136, 4, 8)
+idle = (0, 120, 2, 2.5)
+walk = (0, 136, 4, 6)
 
 class Player:
     def __init__(self, x : float, y : float) -> None:
