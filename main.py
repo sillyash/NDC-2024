@@ -1,10 +1,11 @@
 import pyxel
 
 # CONSTANTES APP
-
 HEIGHT = 128
 WIDTH = 128
 FPS = 128
+
+# ------------------------------------------------
 
 class App:
     def __init__(self):
@@ -16,30 +17,70 @@ class App:
 
     def update(self):
         self.player.update()
+        
 
     def draw(self):
         pyxel.cls(5)
         self.player.draw()
 
+# ------------------------------------------------
+
+class Icon:
+    def __init__(self, x, y, sprite : tuple) -> None:
+        self.x = x
+        self.y = y
+        self.sp = sprite
+    
+    def update(self) -> None:
+        if (pyxel.frame_count % (FPS/2) == 0):
+            self.y += 1
+        elif (pyxel.frame_count % FPS == 0):
+            self.y -= 2
+
+    def draw(self) -> None:
+        pyxel.blt(self.x, self.y, self.sp[0], self.sp[1], self.sp[2], self.sp[3])
+
+# --------------------------------------------------
 
 # CONSTANTES PLAYER
-#SPRITES
 s1 = (0, 0, 120, 16, 16, 5)
-
 PLAYER_SPEED = 55/FPS
 
 class Player:
     def __init__(self, x:int, y:int):
         self.x = x
         self.y = y
-        self.life = 5
         self.cSprite = s1
         self.direction = 1
         self.cursor = 0
+        self.lives = 6
+        self.hearts = []
+        self.lightnings = []
+        self.Initialize_Icons()
+        self.icons = [self.hearts, self.lightnings]
 
     def update(self):
         self.move()
-        
+        for i in range(len(self.icons)):
+            for icon in range(self.icons[i]):
+                icon.update()
+
+    def draw(self):
+        pyxel.blt(self.x, self.y, self.cSprite[0], self.cSprite[1], self.cSprite[2], self.cSprite[3], self.cSprite[4], self.cSprite[5])  
+        # draw icons
+        for i in range(len(self.icons)):
+            for icon in range(self.icons[i]):
+                icon.draw()
+
+    def Initialize_Icons(self) -> None:
+        heart1 = Icon(3, 3, fullHeart)
+        heart2 = Icon(10, 3, fullHeart)
+        heart3 = Icon(17, 3, fullHeart)
+        self.hearts.append(heart1, heart2, heart3)
+        light1 = Icon(125, 125, lightningEmpty)
+        light2 = Icon(118, 125, lightningEmpty)
+        self.lightnings.append(light1, light2) 
+
     def move(self):
         isMoving = False
     
@@ -64,13 +105,38 @@ class Player:
             if(self.cursor < 48):
                 self.cursor += 16
             else:
-                self.cursor = 0
-        
-
-    def draw(self):
-        pyxel.blt(self.x, self.y, self.cSprite[0], self.cSprite[1], self.cSprite[2], self.cSprite[3], self.cSprite[4], self.cSprite[5])      
+                self.cursor = 0   
 
 
+# ------------------------------------------------
+    
+class PowerUp:
+    def __init__(self, x, y, sprite : tuple, cooldown = 0) -> None:
+        self.x = x
+        self.y = y
+        self.sp = sprite
+        self.visible = True
+        self.cooldown = cooldown
+        self.cooldown_current = 0
+    
+    def update(self) -> None:
+        if (pyxel.frame_count % (FPS/2) == 0):
+            self.y += 1
+        elif (pyxel.frame_count % FPS == 0):
+            self.y -= 2
+        if (not self.visible) and (self.cooldown_current > 0) and (self.cooldown != 0):
+            self.cooldown_current -= 1
+            if self.cooldown_current == 0:
+                self.visible = True
 
+    def draw(self) -> None:
+        if self.visible:
+            pyxel.blt(self.x, self.y, self.sp[0], self.sp[1], self.sp[2], self.sp[3])
+    
+    def touched(self):
+        if self.visible:
+            self.cooldown_current = self.cooldown
+
+# --------------------------------------------------
 
 App()
