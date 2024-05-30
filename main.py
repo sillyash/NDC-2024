@@ -141,7 +141,7 @@ class Player:
         if pyxel.frame_count % (FPS/8) == 0:
             self.cSprite = (0, first_x + self.cursor, first_y, self.direction*16, 16, 5)
             
-            if(self.cursor < nbFrame*16):
+            if(self.cursor < (nbFrame-1)*16):
                 self.cursor += 16
             else:
                 self.cursor = 0
