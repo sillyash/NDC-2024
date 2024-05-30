@@ -1,0 +1,7 @@
+- Joueur
+    - Déplacement
+    - Vie
+    - Icône (classe)
+- Projectile (classe)
+- Ennemis (classe(s))
+- Tilemap & terrain
