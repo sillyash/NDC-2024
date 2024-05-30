@@ -1,13 +1,17 @@
 import pyxel
 
 
-class player:
+class Player:
     def __init__(self, x:int, y:int):
         self.x = x
         self.y = y
 
     def draw(self):
-        
+        pyxel.blt(self.x,self.y,16,16,0,120,5)      
+
+
+
+p1 = Player(0,0)
 
 class App:
     def __init__(self):
@@ -20,6 +24,6 @@ class App:
 
     def draw(self):
         pyxel.cls(0)
-        pyxel.rect(self.x, 0, 8, 8, 9)
+        p1.draw()
 
 App()
