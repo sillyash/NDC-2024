@@ -2,6 +2,6 @@
     - Déplacement
     - Vie
     - Icône (classe)
-- Projectile (classe)
+- bullet (classe)
 - Ennemis (classe(s))
 - Tilemap & terrain

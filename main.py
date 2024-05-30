@@ -15,10 +15,10 @@ powerup = (0,18,234,12,12)
 powerupBoom = (0,34,234,12,12)
 
 #debut de l'animation mouche qui vole faire v+16 pour passer à la suivante 
-fly = (128,8,16,16)
+fly = (0,128,8,16,16)
 
 #debut de l'animation d'explotion faire v+16 pour passer à la suivante 
-boom = (128,32,16,16)
+boom = (0,128,32,16,16)
 
 
 
@@ -28,16 +28,20 @@ class App:
     def __init__(self):
         pyxel.init(HEIGHT, WIDTH, "Nuit du Code", FPS)
         pyxel.load("3.pyxres")
+        pyxel.mouse(True)
         self.x = 0
         self.player = Player(50, 50)
+        self.proj = bullet(40,40)
         pyxel.run(self.update, self.draw)
 
     def update(self):
         self.player.update()
+        self.proj.update()
 
     def draw(self):
         pyxel.cls(5)
         self.player.draw()
+        self.proj.draw()
 
 # ------------------------------------------------
 
@@ -67,13 +71,19 @@ idle = (0, 120, 2, 4)
 walk = (0, 136, 4, 8)
 
 class Player:
-    def __init__(self, x:int, y:int):
+    def __init__(self, x : float, y : float) -> None:
         self.x = x
         self.y = y
         self.cSprite = s1
         self.direction = 1
         self.cursor = 0
         self.lives = 6
+
+        #bullets
+        self.timer = 0
+        self.bullets = []
+
+        #HUD
         self.hearts = []
         self.lightnings = []
         self.Initialize_Icons()
@@ -85,12 +95,24 @@ class Player:
             for icon in self.icons[i]:
                 icon.update()
 
+        if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT) and pyxel.frame_count - self.timer > COOLDOWN*FPS:
+            self.timer = pyxel.frame_count
+            bull = bullet(self.x, self.y)
+            self.bullets.append(bull)
+            
+
+        for bull in self.bullets:
+            bull.update()
+
+
     def draw(self):
         pyxel.blt(self.x, self.y, self.cSprite[0], self.cSprite[1], self.cSprite[2], self.cSprite[3], self.cSprite[4], self.cSprite[5])  
         # draw icons
         for i in range(len(self.icons)):
             for icon in self.icons[i]:
                 icon.draw()
+        for bullet in self.bullets:
+            bullet.draw()
 
     def Initialize_Icons(self) -> None:
         heart1 = Icon(3, 3, fullHeart)
@@ -104,7 +126,7 @@ class Player:
         self.lightnings.append(light1)
         self.lightnings.append(light2) 
 
-    def move(self):
+    def move(self) -> None:
         isMoving = False
     
         if pyxel.btn(pyxel.KEY_Z):
@@ -129,7 +151,7 @@ class Player:
         else:
             self.anim(idle[0],idle[1],idle[2],idle[3])
 
-    def touchBorder(self):
+    def touchBorder(self) -> None:
         if self.x < 0:
             self.x = 0
         elif self.x > WIDTH - 16:
@@ -140,7 +162,7 @@ class Player:
         elif self.y > HEIGHT - 16:
             self.y = HEIGHT - 16
 
-    def anim(self, first_x, first_y, nbFrame, speed):
+    def anim(self, first_x : int, first_y : int, nbFrame : int, speed : int):
         if pyxel.frame_count % (FPS/speed) == 0:
             self.cSprite = (0, first_x + self.cursor, first_y, self.direction*16, 16, 5)
             
@@ -153,7 +175,7 @@ class Player:
 # ------------------------------------------------
     
 class PowerUp:
-    def __init__(self, x, y, sprite : tuple, cooldown = 0) -> None:
+    def __init__(self, x : int, y : int, sprite : tuple, cooldown = 0) -> None:
         self.x = x
         self.y = y
         self.sp = sprite
@@ -181,8 +203,45 @@ class PowerUp:
 
 # --------------------------------------------------
 
-class Projectile:
-    def          
+#BULLETS CONSTANTS
+COOLDOWN = 0.5 #in seconds
+BULLET_SPEED = 100/FPS
 
+#SPRITES
+webBall = (0,131,193,4,4,5)
+
+class bullet:
+    def __init__(self, x : float, y : float) -> None:
+        self.x = x
+        self.y = y
+        self.direction = self.mouseDirection()
+
+    def update(self):
+        self.x += BULLET_SPEED*self.direction[0]
+        self.y += BULLET_SPEED*self.direction[1]
+
+    def mouseDirection(self) -> tuple:
+        x = self.x - pyxel.mouse_x
+        y = self.y - pyxel.mouse_y
+
+        return normalizeVector(x,y)
+        
+
+        
+    def draw(self) -> None:
+        pyxel.blt(self.x, self.y, webBall[0], webBall[1], webBall[2], webBall[3], webBall[4], webBall[5])
+
+def normalizeVector(x : int, y : int) -> tuple:
+    if x > y:
+        if x != 0:
+            return(1, y/x)
+        else:
+            return(1,0)
+    elif y > x:
+        if y != 0:
+            return(x/y, 1)
+        else:
+            return(0,1)
+    
 # --------------------------------------------------
 App()
