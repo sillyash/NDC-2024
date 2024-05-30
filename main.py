@@ -5,28 +5,46 @@ HEIGHT = 256
 WIDTH = 256
 FPS = 128
 
+# icones
 fullHeart = (0,48,216,15,15)
 halfHeart = (0,51,203,10,10)
 emptyHeart = (0,51,187,10,10)
 lightningEmpty = (0,35,187,10,10)
 lightningFull = (0,35,203,10,10)
 
+# ...
 powerup = (0,18,234,12,12)
 powerupBoom = (0,34,234,12,12)
 
 #debut de l'animation mouche qui vole faire v+16 pour passer à la suivante 
 fly = (0,128,8,16,16)
 
-#debut de l'animation d'explotion faire v+16 pour passer à la suivante 
+#debut de l'animation d'explosion faire v+16 pour passer à la suivante 
 boom = (0,128,32,16,16)
 
-powerupHeal = (0,2,234,12,12)
+# nectar
+nectar = (0,2,234,12,12)
 
+# diver
 spriteDiver = (0,0,8,16,16)
 
+# ---------- FONCTIONS GLOBALES ----------
 
+def normalizeVector(x : int, y : int) -> tuple:
+    
+    if abs(x) > abs(y):
+        if x != 0:
+            return(x/abs(x), y/abs(x))
+    elif abs(y) > abs(x):
+        if y != 0:
+            return(x/abs(y), y/abs(y))
+    else:
+        return(x/abs(x),x/abs(x))
 
-# ------------------------------------------------
+def abs(x):
+    return x*pyxel.sgn(x)
+
+# ----------------- CLASSES -------------------
 
 class App:
     def __init__(self):
@@ -107,7 +125,6 @@ class Player:
             if bull.touchBorder():
                 self.bullets.remove(bull)
 
-
     def draw(self):
         for bullet in self.bullets:
             bullet.draw()
@@ -116,7 +133,6 @@ class Player:
         for i in range(len(self.icons)):
             for icon in self.icons[i]:
                 icon.draw()
-        
 
     def Initialize_Icons(self) -> None:
         heart1 = Icon(3, 3, fullHeart)
@@ -174,7 +190,6 @@ class Player:
                 self.cursor += 16
             else:
                 self.cursor = 0
-
 
 # ------------------------------------------------
     
@@ -246,26 +261,9 @@ class bullet:
         
     def draw(self) -> None:
         pyxel.blt(self.x, self.y, self.sprite[0], webBall[1], self.sprite[2], self.sprite[3], self.sprite[4], self.sprite[5])
-
-
-
-
-def normalizeVector(x : int, y : int) -> tuple:
     
-    if abs(x) > abs(y):
-        if x != 0:
-            return(x/abs(x), y/abs(x))
-    elif abs(y) > abs(x):
-        if y != 0:
-            return(x/abs(y), y/abs(y))
-    else:
-        return(x/abs(x),x/abs(x))
-    
-
-def abs(x):
-    return x*pyxel.sgn(x)
 # --------------------------------------------------
-#flies
+
 class Fly :
     def __init__(self, x:int,y:int):
         self.x = x
@@ -311,4 +309,10 @@ class Fly :
                 self.cursor += 16
             else:
                 self.cursor = 0
+
+
+
+
+
 App()
+
