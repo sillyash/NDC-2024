@@ -10,6 +10,7 @@ class App:
     def __init__(self):
         pyxel.init(HEIGHT, WIDTH, "Nuit du Code", FPS)
         self.x = 0
+        self.player = Player(0,0)
         pyxel.run(self.update, self.draw)
 
     def update(self):
@@ -17,7 +18,7 @@ class App:
 
     def draw(self):
         pyxel.cls(0)
-        p1.draw()
+        self.player.draw()
 
 
 # CONSTANTES PLAYER
@@ -32,6 +33,6 @@ class Player:
         pyxel.blt(self.x,self.y,16,16,0,120,5)      
 
 
-p1 = Player(0,0)
+
 
 App()
