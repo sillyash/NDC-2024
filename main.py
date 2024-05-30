@@ -1,5 +1,14 @@
 import pyxel
 
+
+class player:
+    def __init__(self, x:int, y:int):
+        self.x = x
+        self.y = y
+
+    def draw(self):
+        
+
 class App:
     def __init__(self):
         pyxel.init(128, 128, title="Nuit du Code")
