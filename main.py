@@ -62,6 +62,9 @@ class Icon:
 s1 = (0, 0, 120, 16, 16, 5)
 PLAYER_SPEED = 55/FPS
 
+#ANIMATIONS
+walk = (0,136,4)
+
 class Player:
     def __init__(self, x:int, y:int):
         self.x = x
@@ -118,13 +121,30 @@ class Player:
             isMoving = True
             self.direction = 1
 
-        if pyxel.frame_count % (FPS/8) == 0 and isMoving:
-            self.cSprite = (0, self.cursor, 136, self.direction*16, 16, 5)
+        self.touchBorder()
+
+        if isMoving:
+            self.moveAnim(walk[0],walk[1],walk[2])
+
+    def touchBorder(self):
+        if self.x < 0:
+            self.x = 0
+        elif self.x > WIDTH - 16:
+            self.x = WIDTH - 16
+
+        if self.y < 0:
+            self.y = 0
+        elif self.y > HEIGHT - 16:
+            self.y = HEIGHT - 16
+
+    def moveAnim(self, first_x, first_y, nbFrame):
+        if pyxel.frame_count % (FPS/8) == 0:
+            self.cSprite = (0, first_x + self.cursor, first_y, self.direction*16, 16, 5)
             
-            if(self.cursor < 48):
+            if(self.cursor < nbFrame*16):
                 self.cursor += 16
             else:
-                self.cursor = 0   
+                self.cursor = 0
 
 
 # ------------------------------------------------
