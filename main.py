@@ -106,13 +106,14 @@ class Player:
 
 
     def draw(self):
-        pyxel.blt(self.x, self.y, self.cSprite[0], self.cSprite[1], self.cSprite[2], self.cSprite[3], self.cSprite[4], self.cSprite[5])  
+        for bullet in self.bullets:
+            bullet.draw()
+        pyxel.blt(self.x, self.y, self.cSprite[0], self.cSprite[1], self.cSprite[2], self.cSprite[3], self.cSprite[4], self.cSprite[5])
         # draw icons
         for i in range(len(self.icons)):
             for icon in self.icons[i]:
                 icon.draw()
-        for bullet in self.bullets:
-            bullet.draw()
+        
 
     def Initialize_Icons(self) -> None:
         heart1 = Icon(3, 3, fullHeart)
@@ -212,17 +213,18 @@ webBall = (0,131,193,4,4,5)
 
 class bullet:
     def __init__(self, x : float, y : float) -> None:
-        self.x = x
-        self.y = y
+        self.x = x + 4
+        self.y = y + 4
         self.direction = self.mouseDirection()
+        print(self.mouseDirection())
 
     def update(self):
         self.x += BULLET_SPEED*self.direction[0]
         self.y += BULLET_SPEED*self.direction[1]
 
     def mouseDirection(self) -> tuple:
-        x = self.x - pyxel.mouse_x
-        y = self.y - pyxel.mouse_y
+        x = pyxel.mouse_x - self.x
+        y = pyxel.mouse_y - self.y
 
         return normalizeVector(x,y)
         
@@ -232,16 +234,18 @@ class bullet:
         pyxel.blt(self.x, self.y, webBall[0], webBall[1], webBall[2], webBall[3], webBall[4], webBall[5])
 
 def normalizeVector(x : int, y : int) -> tuple:
-    if x > y:
-        if x != 0:
-            return(1, y/x)
-        else:
-            return(1,0)
-    elif y > x:
-        if y != 0:
-            return(x/y, 1)
-        else:
-            return(0,1)
     
+    if abs(x) > abs(y):
+        if x != 0:
+            return(x/abs(x), y/abs(x))
+    elif abs(y) > abs(x):
+        if y != 0:
+            return(x/abs(y), y/abs(y))
+    else:
+        return(x/abs(x),x/abs(x))
+
+
+def abs(x):
+    return x*pyxel.sgn(x)
 # --------------------------------------------------
 App()
