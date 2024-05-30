@@ -4,7 +4,7 @@ import pyxel
 HEIGHT = 256
 WIDTH = 256
 FPS = 60
-NEST_W = 40
+NEST_W = 58
 
 # icones
 fullHeart = (0,48,216,15,15)
@@ -14,11 +14,12 @@ lightningEmpty = (0,35,187,10,10)
 lightningFull = (0,35,203,10,10)
 
 # ...
+powerupHeal = (0,2,234,12,12)
 powerup = (0,18,234,12,12)
 powerupBoom = (0,34,234,12,12)
 
 #debut de l'animation mouche qui vole faire v+16 pour passer à la suivante 
-fly = (0,128,8,16,16)
+fly = (0,128,8,-16,16)
 
 #debut de l'animation d'explosion faire v+16 pour passer à la suivante 
 boom = (0,128,32,16,16)
@@ -73,12 +74,17 @@ class App:
         self.player = Player(50, 50)
         self.flies = []
         self.nest = Nest()
+        self.score = 0
+        self.nectar = PowerUp(60,80,powerupHeal, 10)
         pyxel.playm(0, 0, True)
         pyxel.run(self.update, self.draw)
 
     def update(self):
         self.player.update()
-        #self.nectar.update()
+        self.nectar.update()
+        if collision(self.nectar.rect(), self.player.rect()) and self.nectar.visible == True:
+            self.nest.addLife(4)
+            self.nectar.used()
         #self.nest.update()
         self.spawnFlies()
         
@@ -94,6 +100,7 @@ class App:
                 if collision(bullet.rect(), fly.rect()):
                     if (fly.removeLife(1)):
                         self.flies.remove(fly)
+                        self.score += 1
                     self.player.bullets.remove(bullet)
             
             if bullet != None:
@@ -111,15 +118,18 @@ class App:
         pyxel.cls(5)
         pyxel.bltm(0, 0, 1, 0, 0, 255, 255)
         self.player.draw()
-        #self.nectar.draw()
+        self.nectar.draw()
         #self.nest.draw()
 
         # draw mouches
         for fly in self.flies:
             fly.draw()
+        
+        pyxel.text(WIDTH-50, 4, "Score : " + str(self.score), 0)
+        pyxel.text(WIDTH-180, 4, "Nest life : " + str(self.nest.life), 0)
 
     def spawnFlies(self):
-        if (pyxel.frame_count % 55 == 0):
+        if (pyxel.frame_count % 45 == 0):
             self.flies.append(Fly(WIDTH,pyxel.rndi(10,HEIGHT-15)))
 
 # ------------------------------------------------
@@ -127,7 +137,7 @@ class App:
 class Nest:
     def __init__(self) -> None:
         self.life = 50
-        self.width = 40
+        self.width = NEST_W
     
     def addLife(self, i):
         self.life += i
@@ -259,8 +269,8 @@ class Player:
             self.anim(idle[0],idle[1],idle[2],idle[3])
 
     def touchBorder(self) -> None:
-        if self.x < 0:
-            self.x = 0
+        if self.x < NEST_W:
+            self.x = NEST_W
         elif self.x > WIDTH - 16:
             self.x = WIDTH - 16
 
@@ -296,18 +306,23 @@ class PowerUp:
         if (pyxel.frame_count % (FPS/2) == 0):
             self.y += 1
         elif (pyxel.frame_count % FPS == 0):
-            self.y -= 2
-        if (not self.visible) and (self.cooldown_current > 0) and (self.cooldown != 0):
-            self.cooldown_current -= 1
-            if self.cooldown_current == 0:
-                self.visible = True
+            self.y -= 1
+        if (pyxel.frame_count % 60 == 0):
+            if (not self.visible) and (self.cooldown_current > 0) and (self.cooldown != 0):
+                self.cooldown_current -= 1
+                if self.cooldown_current == 0:
+                    self.visible = True
     
     def rect(self) -> tuple:
         return (self.x, self.y, 12, 12)
 
+    def used(self):
+        self.cooldown_current = self.cooldown
+        self.visible = False
+
     def draw(self) -> None:
         if self.visible:
-            pyxel.blt(self.x, self.y, self.sp[0], self.sp[1], self.sp[2], self.sp[3])
+            pyxel.blt(self.x, self.y, self.sp[0], self.sp[1], self.sp[2], self.sp[3], self.sp[4], 5)
     
     def touched(self):
         if self.visible:
@@ -316,8 +331,8 @@ class PowerUp:
 # --------------------------------------------------
 
 #BULLETS CONSTANTS
-COOLDOWN = 0.5 #in seconds
-BULLET_SPEED = 100/FPS
+COOLDOWN = 0.28 #in seconds
+BULLET_SPEED = 125/FPS
 
 #SPRITES
 webBall = (0,131,193,4,4,5)
