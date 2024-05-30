@@ -20,6 +20,10 @@ fly = (0,128,8,16,16)
 #debut de l'animation d'explotion faire v+16 pour passer à la suivante 
 boom = (0,128,32,16,16)
 
+powerupHeal = (0,2,234,12,12)
+
+spriteDiver = (0,0,8,16,16)
+
 
 
 # ------------------------------------------------
@@ -261,4 +265,50 @@ def normalizeVector(x : int, y : int) -> tuple:
 def abs(x):
     return x*pyxel.sgn(x)
 # --------------------------------------------------
+#flies
+class Fly :
+    def __init__(self, x:int,y:int):
+        self.x = x
+        self.y = y
+        self.live = 2
+        self.cursor = 0
+        self.cSprite = fly
+        self.flyListe= []
+        
+    def draw (self):
+        pyxel.blt(self.x, self.y, self.cSprite[0], self.cSprite[1], self.cSprite[2], self.cSprite[3], self.cSprite[4], self.cSprite[5])
+
+    def touchBorder(self):
+        if self.x < 0:
+            self.x = 0
+        elif self.x > WIDTH - 16:
+            self.x = WIDTH - 16
+
+        if self.y < 0:
+            self.y = 0
+        elif self.y > HEIGHT - 16:
+            self.y = HEIGHT - 16
+    
+    def flyCreation (self):
+        if (FPS % 30 == 0):
+            self.flyListe.append([0,pyxel.rndi(10,145)])
+
+
+
+    def flyMovement(self):
+        for fly in self.flyListe :
+            if (fly[0]<62):
+                fly[0]+=1
+                self.moveAnim(128,8,8,)
+            else :
+                self.flyListe.remove(fly)
+
+    def anim(self, first_x : int, first_y : int, nbFrame : int, speed : int):
+        if pyxel.frame_count % (FPS/speed) == 0:
+            self.cSprite = (0, first_x + self.cursor, first_y, self.direction*16, 16, 5)
+            
+            if(self.cursor < (nbFrame-1)*16):
+                self.cursor += 16
+            else:
+                self.cursor = 0
 App()
