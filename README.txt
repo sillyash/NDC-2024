@@ -24,7 +24,8 @@ HellSpyders est un Shoot'em Up de type défensif.
 
 Dans ce jeu, le joueur se met dans la peau d'une araignée 
 extraterrestre qui doit repousser des colonisateurs humains,
-appelés "Divers" pour protéger sa planète.
+appelés "Divers" pour protéger son nid, mais également des
+mouches, qui veulent se nourrir avec le nectar du nid.
 
 L'araignée doit protéger son nid à tout prix ! La survie de 
 son espèce en dépend.
@@ -51,13 +52,25 @@ joueur, le nectar d'apparence verte rajoute 5 points de vie
 au nid.
 
 ------------------------------------------------------------
+----------------------- Les mouches ------------------------
+------------------------------------------------------------
+
+Les mouches se déplacent sur une ligne droite dans le but
+d'atteindre le nid et se nourrir du nectar produit par les
+bébés.
+
+Les mouches sont les ennemis les moins coriaces.
+
+------------------------------------------------------------
 ------------------------ Les Divers ------------------------
 ------------------------------------------------------------
 
-La race humaine ayant acqui le clonage, les Divers sont très
-nombreux et arrivent par vagues, et ont pour seul objectif
-d'éradiquer les espèces peuplant les autres planètes, pour
-s'y installer.
+La race humaine ayant acqui le clonage, les Divers sont
+nombreux, et ont pour seul objectif d'éradiquer les espèces
+peuplant les autres planètes pour s'y installer.
+
+Les Divers sont assez coriaces mais moins fréquents que les
+mouches.
 
 Les Divers diposent de fusils et tirent des projectiles qui
 blessent le joueur et, lorsqu'ils touchent le nid, l'abîme
