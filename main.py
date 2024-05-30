@@ -1,8 +1,8 @@
 import pyxel
 
 # CONSTANTES APP
-HEIGHT = 128
-WIDTH = 128
+HEIGHT = 256
+WIDTH = 256
 FPS = 128
 
 fullHeart = (0,48,216,15,15)
@@ -60,7 +60,11 @@ class Icon:
 
 # CONSTANTES PLAYER
 s1 = (0, 0, 120, 16, 16, 5)
-PLAYER_SPEED = 55/FPS
+PLAYER_SPEED = 80/FPS
+
+#ANIMATIONS
+idle = (0, 120, 2, 4)
+walk = (0, 136, 4, 8)
 
 class Player:
     def __init__(self, x:int, y:int):
@@ -95,8 +99,8 @@ class Player:
         self.hearts.append(heart1)
         self.hearts.append(heart2)
         self.hearts.append(heart3)
-        light1 = Icon(105, 115, lightningEmpty)
-        light2 = Icon(115, 115, lightningEmpty)
+        light1 = Icon(WIDTH - 15, HEIGHT - 15, lightningEmpty)
+        light2 = Icon(WIDTH - 15*2, HEIGHT - 15, lightningEmpty)
         self.lightnings.append(light1)
         self.lightnings.append(light2) 
 
@@ -118,13 +122,32 @@ class Player:
             isMoving = True
             self.direction = 1
 
-        if pyxel.frame_count % (FPS/8) == 0 and isMoving:
-            self.cSprite = (0, self.cursor, 136, self.direction*16, 16, 5)
+        self.touchBorder()
+
+        if isMoving:
+            self.anim(walk[0],walk[1],walk[2],walk[3])
+        else:
+            self.anim(idle[0],idle[1],idle[2],idle[3])
+
+    def touchBorder(self):
+        if self.x < 0:
+            self.x = 0
+        elif self.x > WIDTH - 16:
+            self.x = WIDTH - 16
+
+        if self.y < 0:
+            self.y = 0
+        elif self.y > HEIGHT - 16:
+            self.y = HEIGHT - 16
+
+    def anim(self, first_x, first_y, nbFrame, speed):
+        if pyxel.frame_count % (FPS/speed) == 0:
+            self.cSprite = (0, first_x + self.cursor, first_y, self.direction*16, 16, 5)
             
-            if(self.cursor < 48):
+            if(self.cursor < (nbFrame-1)*16):
                 self.cursor += 16
             else:
-                self.cursor = 0   
+                self.cursor = 0
 
 
 # ------------------------------------------------
@@ -158,4 +181,8 @@ class PowerUp:
 
 # --------------------------------------------------
 
+class Projectile:
+    def          
+
+# --------------------------------------------------
 App()
