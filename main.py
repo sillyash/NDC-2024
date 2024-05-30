@@ -9,8 +9,9 @@ FPS = 128
 class App:
     def __init__(self):
         pyxel.init(HEIGHT, WIDTH, "Nuit du Code", FPS)
+        pyxel.load("3.pyxres")
         self.x = 0
-        self.player = Player(0,0)
+        self.player = Player(50,50)
         pyxel.run(self.update, self.draw)
 
     def update(self):
@@ -22,7 +23,7 @@ class App:
 
 
 # CONSTANTES PLAYER
-sprite1 = (0, 120, 16, 16)
+s1 = (0, 0, 120, 16, 16, 5)
 
 class Player:
     def __init__(self, x:int, y:int):
@@ -30,7 +31,7 @@ class Player:
         self.y = y
 
     def draw(self):
-        pyxel.blt(self.x,self.y,16,16,0,120,5)      
+        pyxel.blt(self.x, self.y, s1[0], s1[1], s1[2], s1[3], s1[4], s1[5])      
 
 
 
